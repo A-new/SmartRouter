@@ -1,0 +1,46 @@
+# ── Line ending normalization ──
+# All text files: normalize to LF in repo, CRLF on Windows checkout
+* text=auto eol=crlf
+
+# Source code — always text
+*.ts    text eol=crlf
+*.tsx   text eol=crlf
+*.js    text eol=crlf
+*.jsx   text eol=crlf
+*.css   text eol=crlf
+*.html  text eol=crlf
+*.json  text eol=crlf
+*.md    text eol=crlf
+*.toml  text eol=lf
+*.yaml  text eol=crlf
+*.yml   text eol=crlf
+*.rs    text eol=lf
+*.lock  text eol=lf
+*.sh    text eol=lf
+
+# Binary files — never normalize
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.icns  binary
+*.bmp   binary
+*.svg   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.eot   binary
+
+# ── Linguist: this repo is the public thin shell ──
+# Core application logic lives in the private `echobird_core` crate
+# (github.com/edison7009/EchoBird-secret-). Everything in this repo
+# that is not `.rs` is bundled UI / configuration / installer / docs
+# tooling around that core. The language bar should reflect the
+# project's architectural identity (Rust) rather than the byte count
+# of bundled assets, so we mark everything vendored and exempt only
+# `.rs` files.
+
+* linguist-vendored
+*.rs -linguist-vendored
+docs/** linguist-documentation

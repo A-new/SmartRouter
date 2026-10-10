@@ -1,0 +1,36 @@
+{
+    "hints": [
+        {
+            "action": "install",
+            "agent": "OpenClaw"
+        },
+        {
+            "action": "install",
+            "agent": "Claude Code"
+        },
+        {
+            "action": "install",
+            "agent": "Hermes Desktop"
+        },
+        {
+            "action": "installGit"
+        },
+        {
+            "action": "showSpecs"
+        },
+        {
+            "action": "troubleshoot",
+            "agent": "OpenClaw"
+        },
+        {
+            "action": "uninstall",
+            "agent": "OpenClaw"
+        },
+        {
+            "action": "networkInfo"
+        },
+        {
+            "action": "securityAudit"
+        }
+    ]
+}

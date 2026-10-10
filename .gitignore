@@ -1,0 +1,103 @@
+# Internal development docs (local only)
+internal-docs/
+PROGRESS_HANDOFF.md
+FRONTEND_QUALITY.md
+SECURITY_AUDIT.md
+STAGE4_TEST_REPORT.md
+*_HANDOFF.md
+*_QUALITY.md
+*_AUDIT.md
+*_TEST_REPORT.md
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-electron/
+out/
+release/
+*.exe
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dev scripts & test files
+dev.bat
+start.bat
+stop.bat
+clean-cache.bat
+run-repo-dev.bat
+test-*.mjs
+demo-*.mjs
+inspect-*.mjs
+verify-*.mjs
+ts-errors.txt
+lint-output.txt
+
+# Claude Code agent — per-machine config + worktrees + plans (all local).
+# Earlier only settings.local.json was ignored, but `.claude/worktrees/*`
+# are full git worktrees that `git add -A` will pick up as embedded
+# submodule references (mode 160000) and corrupt the repo. Ignore the
+# whole directory.
+.claude/
+.codebuddy/
+
+# OpenCode agent scratch dirs (regenerated locally, not part of the build)
+.opencode/
+
+# Project specific
+.whichclaw.pid
+.electron-cache
+
+# One-off / scratch files (do not commit)
+tmp/
+.agent/
+# scripts/ is mostly scratch, but a few entries are real CI artifacts.
+# Ignore everything by default and whitelist the keepers explicitly.
+scripts/*
+!scripts/build_en_pulse.py
+!scripts/filter_pulse.py
+!scripts/merge_aihot.py
+!scripts/inject_pinned.py
+!scripts/pulse_pinned.json
+
+# llama-server binaries (downloaded during CI build)
+electron/tools/llama-server/bin/
+
+# Antigravity local cache
+.gemini/
+
+# Rust / Tauri build artifacts
+target/
+src-tauri/target/
+src-tauri/gen/
+
+# Local Cargo config (contains machine-specific paths)
+src-tauri/.cargo/config.toml
+
+# Plugin build artifacts
+plugins/*/target/
+plugins/*/bridge/target/
+tools/*/target/
+roles/en/
+roles/zh-Hans/
+
+# Android signing keystore (NEVER commit — store in GitHub Secrets)
+*.keystore
+*-keystore-b64.txt
+Echobird-MotherAgent/
+references/

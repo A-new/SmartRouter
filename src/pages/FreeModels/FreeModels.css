@@ -1,0 +1,130 @@
+/* The hub and the candidate list share one surface declaration so the two
+   panels always read as the same material. */
+.free-model-router-hub,
+.free-model-router-list {
+  background: rgb(var(--bg-elevated-rgb) / 0.72);
+  border: 1px solid rgb(var(--border-rgb) / 0.7);
+}
+
+/* The list mirrors the hub's state tint so both panels hold the same colour
+   whether the router is serving candidates or down. */
+.free-model-router-hub.is-running,
+.free-model-router-list.is-running {
+  background: rgb(var(--accent-rgb) / 0.12);
+  border-color: rgb(var(--accent-rgb) / 0.38);
+}
+
+.free-model-router-hub.is-unavailable,
+.free-model-router-list.is-unavailable {
+  background: rgb(var(--error-rgb) / 0.11);
+  border-color: rgb(var(--error-rgb) / 0.38);
+}
+
+.free-model-router-state {
+  color: rgb(var(--text-muted-rgb));
+}
+
+.free-model-router-hub.is-running .free-model-router-state {
+  color: rgb(var(--accent-rgb));
+}
+
+.free-model-router-hub.is-unavailable .free-model-router-state {
+  color: rgb(var(--error-rgb));
+}
+
+/* The candidate that is answering right now. */
+.free-model-live-dot {
+  height: 6px;
+  width: 6px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: rgb(var(--accent-rgb));
+  animation: free-model-live-pulse 1.6s ease-out infinite;
+}
+
+.free-model-scan-progress {
+  transition: width 230ms linear;
+}
+
+/* Where a row dragged from the grip would land. */
+.free-model-row-drop {
+  background: rgb(var(--accent-rgb) / 0.06);
+  box-shadow: inset 0 1px 0 0 rgb(var(--accent-rgb));
+}
+
+.free-model-scan-dots {
+  display: inline-block;
+  width: 1.5em;
+  text-align: left;
+}
+
+.free-model-scan-dots span:nth-child(2) {
+  animation: free-model-scan-dot-two 1.2s steps(1, end) infinite;
+}
+
+.free-model-scan-dots span:nth-child(3) {
+  animation: free-model-scan-dot-three 1.2s steps(1, end) infinite;
+}
+
+.free-model-provider-enter {
+  animation: free-model-provider-in 180ms ease-out both;
+}
+
+@keyframes free-model-live-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px rgb(var(--accent-rgb) / 0);
+  }
+}
+
+@keyframes free-model-provider-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes free-model-scan-dot-two {
+  0%,
+  32% {
+    visibility: hidden;
+  }
+  33%,
+  100% {
+    visibility: visible;
+  }
+}
+
+@keyframes free-model-scan-dot-three {
+  0%,
+  65% {
+    visibility: hidden;
+  }
+  66%,
+  100% {
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .free-model-live-dot,
+  .free-model-provider-enter {
+    animation: none;
+  }
+
+  .free-model-scan-progress {
+    transition: none;
+  }
+
+  .free-model-scan-dots span {
+    animation: none;
+    visibility: visible;
+  }
+}

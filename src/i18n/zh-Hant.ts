@@ -1,0 +1,100 @@
+// Traditional Chinese translation (Taiwan vocabulary preferred over HK)
+// Derived from zh-Hans with character conversion + TW-specific term swaps
+// (軟體/使用者/設定/預設/影片/伺服器/訊息/檔案/啟動/連線 etc.)
+import { Translations } from './types';
+const zhHant: Partial<Translations> = {
+  'page.freeModels': '智能路由',
+  'freeModels.fetch': '獲取免費模型',
+  'freeModels.fetchHint': '點擊頂部獲取免費模型',
+  'freeModels.fetchFailed': '暫時無法獲取免費模型，請稍後重試。',
+  'freeModels.scanning': '新發現：',
+  'freeModels.scanConnecting': '正在挖掘免費模型',
+  'freeModels.customAdd': '自定義新增',
+  'freeModels.addToRouter': '新增模型到智能路由',
+  'freeModels.help': '使用說明',
+  'freeModels.help.routerTitle': '為什麼需要智能路由？',
+  'freeModels.help.routerDesc':
+    '免費模型經常會遇到額度耗盡、請求限速或臨時不可用的問題。智能路由透過一個本機 API 聚合所有已新增的模型，對外始終只提供一個 API 位址，無需頻繁切換設定。',
+  'freeModels.help.routerHow': '它的運作方式如下：',
+  'freeModels.help.routerPoint1':
+    '共享額度，均衡調用：同一 Key 下的多個模型共享一份額度，系統會依照你設定的限速策略輪流分配請求，而不是等某個模型觸發限流後再切換。',
+  'freeModels.help.routerPoint2':
+    '自動故障切換：當模型因限流、欠費、鑑權失敗或下線而不可用時，會自動進入冷卻期（限流約 1 分鐘、鑑權/欠費 1 小時、模型下線 6 小時），並立即切換到其他可用模型；冷卻結束後自動恢復參與調度。',
+  'freeModels.help.routerPoint3':
+    '支援自動與分組路由：使用 auto 時，會在全部可用模型中智能選擇；使用分組名時，僅在該分組內進行路由和回退，不會跨組切換。由於不同平台對同一模型的命名可能不同，分組可以確保回退後仍使用同一模型系列。未分組的模型僅參與 auto。',
+  'freeModels.help.routerPoint4':
+    '失敗回饋：單次請求最多嘗試 20 個模型；如果所有模型都暫時沒有可用額度，介面會傳回 429，並告知最早可重試時間。',
+  'freeModels.help.routerSummary':
+    '簡單來說：一個位址接入、多模型自動調度、故障無感切換、額度利用最大化。',
+  'freeModels.help.useTitle': '如何使用',
+  'freeModels.help.step1': '點擊右側廠商卡片末端的外鏈圖示，前往對應網站取得 API Key。',
+  'freeModels.help.step2':
+    '點擊廠商卡片，選擇模型 ID、填入 API Key 並儲存。新增的廠商越多，可切換的免費機會越多。',
+  'freeModels.help.step3': '也可使用「自定義新增」接入其他免費、收費或私有模型。',
+  'freeModels.docs': '查看規則',
+  'freeModels.router.emptyTitle': '目前已接入 0 個模型',
+  'freeModels.router.emptyDesc': '從右側列表開始新增',
+  'freeModels.router.limitReached': '智能路由最多新增 20 個模型',
+  'freeModels.router.group': '路由分組',
+  'freeModels.router.groupHint':
+    '同組模型互為回退目標，即使各平台對同一模型的命名不同。用這個名字呼叫路由，只會走這一組。',
+  'freeModels.router.groupReserved': '該名稱被路由器保留。',
+  'freeModels.router.groups': '分組',
+  'freeModels.router.rpm': '限速',
+  'freeModels.router.rpmHint':
+    '這個帳號每分鐘允許的請求數。免費 key 通常按 key 限制在 20，同一 key 下的模型共享這個額度。付費 key 填 -1 表示不限制速率；留空則由服務商宣告的額度和 429 回應決定。',
+  'freeModels.router.rpmInvalid':
+    '每分鐘請求數需為 1 到 100000 之間的整數，付費不限速填 -1，留空表示不宣告。',
+  'freeModels.router.rpmUnlimited': '不限速',
+  'freeModels.router.dragHint': '拖曳列可調整順序；多個候選評分相同時，路由器依此順序優先。',
+  'freeModels.router.modelIdHint': '雙擊模型 ID 可開啟設定視窗修改。',
+  'freeModels.router.resizeHint': '拖曳欄位邊界調整寬度，雙擊恢復預設。',
+  'freeModels.router.sortHint': '點擊欄位標題排序，再點一次反轉。',
+  'freeModels.router.provider': '平台',
+  'freeModels.router.status': '狀態',
+  'freeModels.router.statusServing': '服務中',
+  'freeModels.router.statusCooling': '冷卻中',
+  'freeModels.router.statusIdle': '待命',
+  'settings.title': '設定',
+  'settings.version': '版本',
+  'settings.language': '語言',
+  'settings.appearance': '外觀',
+  'settings.themeLight': '淺色',
+  'settings.themeDark': '深色',
+  'settings.themeSystem': '跟隨系統',
+  'settings.updates': '更新',
+  'settings.latestVersion': '已是最新版本',
+  'settings.updateTo': '更新至',
+  'settings.updateDownloading': '下載中',
+  'settings.updateLaunching': '正在啟動安裝程式…',
+  'settings.closeWindowBehavior': '關閉視窗時',
+  'settings.closeDirectly': '直接結束',
+  'settings.closeToTray': '最小化到工作列',
+  'settings.alwaysAsk': '每次詢問',
+  'settings.launchAtStartup': '開機啟動',
+  'closeDialog.title': '視窗關閉方式',
+  'closeDialog.hint':
+    '注意：如果你的 ChatGPT / Codex CLI / Claude 桌面端 / Claude Code 已切換模型，結束會導致無法使用。',
+  'btn.addModel': '新增模型',
+  'btn.close': '關閉',
+  'btn.copied': '已複製',
+  'btn.remove': '移除',
+  'model.name': '名稱',
+  'model.apiKey': 'API 金鑰',
+  'model.paste': '貼上',
+  'model.modelId': '模型 ID',
+  'model.modelIdPlaceholder': '搜尋或輸入模型 ID…',
+  'model.openaiUrl': 'OpenAI 位址',
+  'model.anthropicUrl': 'Anthropic 位址',
+  'model.requiredFields':
+    '請填寫名稱、模型 ID、API 金鑰，以及 OpenAI 或 Anthropic 位址（擇一即可）。',
+  'model.invalidOpenaiUrl': '請輸入有效的 OpenAI 位址。',
+  'model.invalidAnthropicUrl': '請輸入有效的 Anthropic 位址。',
+  'model.editConfig': '編輯模型設定',
+  'model.escCancel': '取消',
+  'model.enterSave': '儲存',
+  'key.encrypted': '已全域加密，任何環境變動時 API Key 將自毀',
+  'key.destroyed': '偵測到環境已變動，API Key 已自毀，請重新輸入',
+  'error.requestFailed': '請求失敗，請重試。',
+};
+export default zhHant;

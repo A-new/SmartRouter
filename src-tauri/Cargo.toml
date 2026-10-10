@@ -1,0 +1,89 @@
+[package]
+name = "SmartRouter"
+version = "5.7.0"
+description = "The Nexus for AI Models"
+authors = ["SmartRouter Team"]
+license = "MIT"
+repository = "https://echobird.ai/"
+edition = "2021"
+rust-version = "1.77.2"
+
+[lib]
+name = "smartrouter_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# Tauri core. `tauri::generate_context!()` (in src/lib.rs) expands against
+# this crate's CARGO_MANIFEST_DIR to find tauri.conf.json; the Builder,
+# Manager, tray, and menu APIs are used throughout services/.
+#
+# tauri-build validates this feature list against the allowlist derived from
+# tauri.conf.json and hard-fails the build on a mismatch — so `protocol-asset`
+# must stay absent while `app.security.assetProtocol.enable` is false.
+tauri = { version = "2", features = ["tray-icon"] }
+
+# Tauri plugins. All are direct deps of this crate (which owns the
+# tauri-build step) so tauri-build's permission validator resolves every
+# capability in capabilities/*.json.
+tauri-plugin-shell = "2"
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-log = "2"
+# Autostart at OS boot (launch-at-login). Registered with a `--minimized`
+# arg so a boot launch starts hidden in the tray (see app_ready + the 1s
+# fallback show in lib.rs). Exposes JS enable/disable/isEnabled, so it
+# needs the autostart:default capability entry.
+tauri-plugin-autostart = "2"
+# Single-instance guard: focus the running window instead of spawning a
+# second process when EchoBird is launched again (e.g. double-clicking the
+# desktop shortcut while it's minimized to tray). Exposes no JS commands, so
+# it needs no capability entry.
+tauri-plugin-single-instance = "2"
+tauri-plugin-window-state = "2"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging
+log = "0.4"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Platform helpers
+dirs = "6"
+image = "0.25"
+
+# Crypto (API Key encryption)
+aes-gcm = "0.10"
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "stream", "gzip"], default-features = false }
+url = "2"
+rand = "0.8"
+futures-util = "0.3"
+
+# HTTP server for the Smart Router — it exposes OpenAI- and
+# Anthropic-compatible endpoints on a fixed loopback port.
+axum = "0.8"
+http-body-util = "0.1"
+tokio-stream = "0.1"
+
+# Time
+chrono = "0.4"
+
+# Desktop UX
+which = "8"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Graphics_Dwm", "Win32_System_Com", "Win32_UI_Shell"] }
+raw-window-handle = "0.6"
+# Registry access for the Windows PATH editor (reads and writes the
+# user PATH value, expanding REG_EXPAND_SZ entries ourselves).
+winreg = "0.55"

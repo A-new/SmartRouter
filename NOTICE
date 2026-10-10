@@ -1,0 +1,330 @@
+EchoBird
+Copyright (c) 2026 edison7009 and EchoBird contributors
+
+This product includes software developed by the EchoBird project
+(https://github.com/edison7009/EchoBird).
+
+Licensed under the MIT License for v5.0.0 and later. The GNU Affero
+General Public License, Version 3.0 or later (AGPL-3.0-or-later) continues
+to govern v4.x and earlier in perpetuity — already-released v4.x binaries
+and their corresponding source remain under AGPL-3.0-or-later and are not
+retroactively relicensed. See the LICENSE file for the current (MIT) text.
+
+================================================================================
+ORIGINAL DESIGNS AND CONCEPTS
+================================================================================
+
+The following designs, features, and UI/UX patterns were originated by the
+EchoBird project. The source code that implements them is governed by the
+MIT license; the *underlying ideas, interface arrangements, and
+combinations* are documented here for two reasons:
+  (a) so honest downstream forks and reimplementations can credit prior
+      art appropriately, and
+  (b) to establish a documented priority claim — including specific UI
+      creative points and first-use evidence — for any future trade-dress
+      or look-and-feel dispute. We list creative points individually so
+      it is clear which elements are claimed; the COMBINED TRADE DRESS
+      NOTICE further below addresses how the combination of these
+      elements is itself protectable.
+
+--------------------------------------------------------------------------------
+A. USER-INTERFACE TRADE DRESS
+--------------------------------------------------------------------------------
+
+The four entries below are claimed as the distinctive user-interface
+"look and feel" of EchoBird. Each entry lists (1) the originating concept
+and (2) specific UI creative points that define the pattern, plus
+(3) first-public-commit evidence for priority.
+
+  1. Mother Agent (internal codename) / 安装与修复 (user-facing UI name)
+
+     Concept — An autonomous AI agent embedded as a first-class top-level
+     surface inside a desktop application, whose ENTIRE PURPOSE is
+     installing, repairing, and deploying OTHER agents and AI tools.
+     Any AI agent can technically install software; what is original to
+     EchoBird is packaging this capability as its own dedicated user-
+     facing product surface rather than burying it inside a settings or
+     "advanced" page.
+
+     Specific UI creative points:
+       - Independent top-level navigation entry (not nested under any
+         tool's own settings)
+       - Conversational installation flow (not a step-wizard, not a
+         checkbox list, not a CLI prompt)
+       - Local-execution and remote-execution targets unified under the
+         same chat surface (one conversation, two back-end execution
+         paths chosen contextually)
+       - Persona-style framing of the deployment agent (avatar, name,
+         dialog tone) rather than a faceless task runner
+
+     First public commit: 2026-03-02 (src/pages/MotherAgent.tsx, 1410
+     lines at commit 546a14ae).
+
+  2. Model Nexus / 模型中心 — "Configure once, used everywhere"
+
+     Concept — A central pool of model configurations (API key, base URL,
+     model ID, protocol) presented as a navigable list, structurally
+     positioned as the single data source that every other user-facing
+     scenario draws from. Configuring a model once in this pool causes it
+     to be available across Install & Repair, Local LLM, My AI Projects,
+     and App Manager without any per-scenario re-entry of credentials.
+
+     Specific UI creative points:
+       - Two-column layout: main list of all model cards on the left;
+         per-model detail/edit panel on the right
+       - The model list is structurally a "pool" consumed by other
+         scenarios — not a settings sub-page subordinate to any one tool
+       - Right-edge inline "+" shortcut button for quick-add (not a
+         toolbar-top button)
+       - Inline one-click latency-test ("ping") before commit, embedded
+         on each model card
+       - Clicking a card opens the detail/edit view in the same right
+         panel (no modal, no page navigation)
+
+     First public commit: 2026-03-02 (initial model directory in
+     docs/api/store/models.json and icon set at commit 546a14ae);
+     dedicated "Model Nexus" naming: 2026-03-26 (commit 1ae49436);
+     full page extraction at commit d80030aa (2026-03-29).
+
+  3. App Manager + My AI Projects (shared UI container)
+
+     Concept — A unified card-grid + right-side-detail container
+     that presents two distinct entity types — (a) official AI / Agent
+     applications and games and (b) the user's own vibe-coded
+     applications and games — through the same UI surface, so the user's
+     own projects sit visually alongside official tools as first-class
+     citizens. The right-side panel handles model selection and one-click
+     "apply" for the selected entity, regardless of which type.
+
+     Specific UI creative points:
+       - Card-grid main area + right-side detail panel two-column layout
+       - One card = one tool or one user project; all actions for that
+         entity (launch / select model / apply / configure) collapse
+         into the card-plus-right-panel pair
+       - The same ToolCard component renders both official tools and
+         user-defined Vibe-Coded projects (MyProjects.tsx imports and
+         reuses the AppManager card)
+       - Right panel "select model → one-click apply" linear flow
+         (no submit button confusion, no separate save state)
+       - Per-card "restore to official" affordance as the first row of
+         the model list
+
+     First public commits: AppManager — 2026-03-02 (src/pages/
+     AppManager.tsx, 674 lines at commit 546a14ae); MyProjects —
+     2026-05-20 (src/pages/MyProjects/ at commit 05a35d13).
+
+     Critical: the *bundled reference applications* (Reversi + AI
+     Translator) — which form the user-tutorial pattern detailed
+     separately in TRADEMARKS.md §4 — were ALREADY PRESENT in the
+     same initial commit 546a14ae on 2026-03-02. They were not
+     introduced when MyProjects shipped on 2026-05-20; MyProjects
+     merely re-positioned the already-existing reference apps from
+     "internal built-in tools" to "user-editable templates". Both
+     reference applications are intentionally model-bound — they
+     cannot function without a model connection from EchoBird's
+     central Model Nexus. The architectural intent to guide users
+     in building their own *model-bound* AI applications and AI
+     games (rather than generic vibe-coded apps that happen to be
+     in this folder) was therefore present from day one of
+     EchoBird's public release.
+
+  4. LocalServer / 一键本地大模型 — One-click local LLM deployment
+
+     Concept — A desktop-embedded UI that compresses the otherwise
+     terminal-heavy process of installing a Python environment,
+     downloading a model weight, picking quantization, configuring a
+     runtime, and exposing OpenAI-compatible + Anthropic-compatible
+     endpoints into a single page with a START button. The point of
+     originality is the pairing of multiple LLM runtimes side-by-side
+     under one UI, with all the surrounding deployment friction hidden.
+
+     Specific UI creative points:
+       - Three runtime engines presented as parallel options under one
+         picker (vLLM / SGLang / llama.cpp) — not a single-engine app
+         with the others as plugins
+       - GPU detection surfaced as a UI element (not a hidden
+         auto-config), with the detected backend visible to the user
+       - Runtime-aware parameter adaptation: switching engine auto-locks
+         "GPU Full / GPU Auto" compute selection to the engine's
+         constraints (vLLM / SGLang lock to GPU; llama.cpp keeps the
+         full GPU/CPU spectrum)
+       - A single "START" button that simultaneously brings up the
+         OpenAI-compatible endpoint AND the Anthropic-compatible
+         endpoint from the same model weight
+       - Quantization picker integrated with model download flow on the
+         same page (no separate "downloads" tab)
+
+     First public commit: 2026-03-02 (src/pages/LocalServer.tsx, 1102
+     lines at commit 546a14ae).
+
+================================================================================
+COMBINED TRADE DRESS NOTICE
+================================================================================
+
+The four UI/UX designs listed in Section A are individually identifiable
+and individually claimed; they also constitute, in combination, the
+distinctive "look and feel" — the trade dress — of EchoBird as a
+product.
+
+A re-implementation that adopts THREE OR MORE of the four UI patterns
+listed in Section A side-by-side in a single competing product —
+**on any platform** (desktop, web, mobile, or future platforms;
+trade dress under U.S. and comparable jurisdictions protects the
+distinctive look-and-feel of a product, not the medium it runs on,
+per Apple v. Samsung among others) — is presumed to derive from
+EchoBird's trade dress unless the implementer can produce
+independently-documented prior work proving otherwise. Adoption of
+a single pattern in isolation is not, by itself, treated as
+infringement: individual elements are common across the industry,
+but the SPECIFIC COMBINATION is original to EchoBird as published
+2026-03-02 onward.
+
+This notice does not waive any other available legal protection. It is
+a written declaration of EchoBird's trade-dress priority and the
+intended scope of enforcement, placed here so that any later party
+operating in the same space is on actual notice of the claim from
+2026-05-22 forward.
+
+整体商业外观声明
+================
+
+A 段所列四项 UI/UX 设计单独可识别、单独主张;在组合层面,它们共同
+构成 EchoBird 作为产品的**独特「整体形态与感觉」(trade dress /
+商业外观)**。
+
+若另一款竞争性产品在 **同一个产品中并列采用其中三项或更多** A 段
+所列 UI 模式 —— **无论该产品基于何种平台**(桌面、网页、手机或
+未来平台;美国及类似法域的 trade dress 保护的是产品的独特整体形态
+与感觉,而不是其运行的介质,参见 Apple v. Samsung 等案)—— 在该
+实施方无法出示**独立留存的更早原创证据**的情况下,推定为对 EchoBird
+整体商业外观的衍生使用。**单独采用其中某一项**本身不视为侵权 ——
+单一元素在行业内常见,但**这套具体组合**自 2026-03-02 公开发布以来,
+为 EchoBird 首创。
+
+本声明不放弃任何其他可用的法律保护途径,仅作为对 EchoBird trade
+dress 主张优先权和拟主张执行范围的书面声明,自 2026-05-22 起置于
+此处,作为对后续在同一领域运营的任何主体的事实告知。
+
+--------------------------------------------------------------------------------
+B. ARCHITECTURAL / TECHNICAL PATTERNS
+--------------------------------------------------------------------------------
+
+The following is an architectural originality claim, not a UI/UX trade
+dress claim, and is therefore not covered by the Combined Trade Dress
+Notice above:
+
+  5. Codex Translator with Spec-Pure Passthrough
+
+     A Responses ↔ Chat Completions translator (and Anthropic Messages
+     equivalent) that deliberately forwards only OpenAI-spec-canonical
+     fields and refuses per-vendor shimming for upstream non-compliance.
+     The refusal to shim is treated as a feature, not a limitation — it
+     keeps the natural feedback chain to vendors intact and avoids
+     accumulating tech debt from speculative compatibility layers.
+     First public commit: 2026-03-04 onward (originally under
+     tools/codex/, later moved to src-tauri/src/services/codex_proxy/
+     and src-tauri/src/services/codex_proxy/ in the secret crate split).
+
+--------------------------------------------------------------------------------
+
+These innovations are protected as original expression under copyright
+law, as documented trade dress, and where applicable as common-law
+trademarks. See TRADEMARKS.md for the brand and naming policy.
+
+================================================================================
+THIRD-PARTY ASSETS (ICONS / ARTWORK)
+================================================================================
+
+  - EchoBird app icon (docs/icon.png and platform variants under
+    src-tauri/icons/)
+      The EchoBird logomark is an original work by the EchoBird project.
+      All rights reserved. See TRADEMARKS.md for the scope of brand rights.
+
+  - Model provider icons (public/icons/models/*.svg)
+      Each provider's official logomark (OpenAI, Anthropic, DeepSeek,
+      Google, Alibaba, Zhipu, Moonshot, Xiaomi, xAI, etc.) is the property
+      of the respective company and is displayed in EchoBird solely to
+      identify the provider's API for the user. Use is nominative fair
+      use; no endorsement is implied or claimed. See "THIRD-PARTY
+      TRADEMARKS" below.
+
+================================================================================
+THIRD-PARTY TRADEMARKS (NOMINATIVE FAIR USE)
+================================================================================
+
+The following names and logos appear in EchoBird solely to identify the
+third-party tools, agents, models, and runtimes that EchoBird supports.
+EchoBird is not affiliated with, endorsed by, or sponsored by any of these
+companies or projects. All marks remain the property of their respective
+owners and are used here under the doctrine of nominative fair use.
+
+  - Claude / Claude Code         — Anthropic, PBC
+  - OpenAI / Codex / ChatGPT     — OpenAI, Inc.
+  - Gemini                       — Google LLC
+  - DeepSeek                     — DeepSeek
+  - Qwen / Tongyi                — Alibaba Group
+  - GLM / ChatGLM                — Zhipu AI
+  - Kimi                         — Moonshot AI
+  - MiMo                         — Xiaomi
+  - Kilo                         — Kilo-Org
+  - Grok                         — xAI Corp.
+  - Cursor                       — Anysphere
+  - Windsurf                     — Codeium
+  - Trae                         — ByteDance
+  - VS Code                      — Microsoft Corporation
+  - Ollama                       — Ollama
+  - llama.cpp                    — Georgi Gerganov
+  - vLLM                         — UC Berkeley Sky Computing Lab
+  - SGLang                       — SGLang project
+  - Tauri                        — the Tauri Programme
+  - Windows / PowerShell         — Microsoft Corporation
+  - macOS                        — Apple Inc.
+  - Linux                        — Linus Torvalds
+
+If you are a rights holder and believe your mark is used in a way that
+exceeds nominative fair use, please open an issue with the label
+`trademark` at https://github.com/edison7009/EchoBird/issues and we
+will adjust promptly.
+
+================================================================================
+THIRD-PARTY COMPONENTS
+================================================================================
+
+EchoBird bundles or links against open-source components whose licenses
+and notices are preserved in their respective source trees. A non-exhaustive
+list of major upstream projects:
+
+  - Tauri (MIT / Apache-2.0)         https://tauri.app
+  - React (MIT)                      https://react.dev
+  - Vite (MIT)                       https://vitejs.dev
+  - TailwindCSS (MIT)                https://tailwindcss.com
+  - lucide-react (ISC)               https://lucide.dev
+  - Rust crates listed in Cargo.toml — see each crate's own license
+  - npm packages listed in package.json — see each package's own license
+  - free-llm-api-hub catalog data (MIT)
+    Copyright (c) 2026 Paco Cartones
+    https://github.com/pacocartones/free-llm-api-hub
+
+Each component remains under its own license. The MIT license that governs
+EchoBird as a whole does not override the terms of these bundled or linked
+components.
+
+The free-llm-api-hub data is redistributed under the following terms:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
